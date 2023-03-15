@@ -1,0 +1,71 @@
+#Configure Repositories
+-plugin.1.Local: \
+    aQute.bnd.deployer.repository.LocalIndexedRepo; \
+        name = Local; \
+        pretty = true; \
+        local = ${build}/local
+
+-plugin.2.Eclipse: \
+    aQute.bnd.deployer.repository.LocalIndexedRepo; \
+        name = Templates; \
+        pretty = true; \
+        local = ${build}/templates
+
+-plugin.3.Release: \
+    aQute.bnd.deployer.repository.LocalIndexedRepo; \
+        name = Release; \
+        pretty = true; \
+        local = ${build}/release
+
+-releaserepo: Release
+-baselinerepo: Release
+
+# Eclipse Release repositories 
+eclipse.version          = 4.18
+eclipse.name             = 2020-12
+eclipse.platform.version = R-4.18-202012021800
+eclipse.simu.version     = 202012161000
+
+eclipse.platform.baseurl = http://download.eclipse.org/eclipse/updates
+#eclipse.platform.baseurl = "${fileuri;${user.home}}www/download.eclipse.org/eclipse/updates"
+eclipse.platform.name    = Platform_${eclipse.platform.version}
+eclipse.platform.url     = "${eclipse.platform.baseurl}/${eclipse.version}/${eclipse.platform.version}"
+
+eclipse.simu.baseurl = http://download.eclipse.org/releases
+#eclipse.simu.baseurl = "${fileuri;${user.home}}www/download.eclipse.org/releases"
+eclipse.simu.name    = "SimuRel_${eclipse.name}_${eclipse.simu.version}"
+eclipse.simu.url     = "${eclipse.simu.baseurl}/${eclipse.name}/${eclipse.simu.version}"
+
+# Remote Eclipse repositories
+
+# 1. creation of the indices via this configurations and store inside cnf/fixedIndices
+#-plugin.10.eclipse.platform: \
+#    aQute.bnd.repository.p2.provider.P2Repository; \
+#        name  = ${eclipse.platform.name}; \
+#        url   = ${eclipse.platform.url}
+
+#-plugin.11.eclipse.simu: \
+#    aQute.bnd.repository.p2.provider.P2Repository; \
+#        name  = ${eclipse.simu.name}; \
+#        url   = ${eclipse.simu.url}
+
+# Reference the locally indexed eclipse repositories
+
+# 2. use the fixed indices saves the load time on new workspaces - https://bndtools.org/repositories.html
+-plugin.20.eclipse.platform: \
+    aQute.bnd.repository.osgi.OSGiRepository;\
+        locations=$[fileuri;${.}]/fixedIndices/p2-Platform_R-4.18-202012021800_index.xml.gz;\
+        name=${eclipse.platform.name};\
+        max.stale=-1
+
+#-plugin.21.eclipse.simu: \
+#   aQute.bnd.repository.osgi.OSGiRepository;\
+#        locations = ${fileuri;${.}}/fixedIndices/p2-SimuRel_2020-12_202012161000_index.xml.gz;\
+#        name      = ${eclipse.simu.name}; \
+#       max.stale=-1
+Bundle-Version:             1.0.0.${tstamp}
+
+-remoteworkspace        true
+-runfw:                 org.apache.felix.framework
+-runee:                 JavaSE-1.8
+
