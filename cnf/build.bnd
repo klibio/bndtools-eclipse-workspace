@@ -1,15 +1,17 @@
+## Java Compiler Options
+#java:                  java
+#javac:                 javac
+javac.source:           17
+javac.target:           17
+javac.compliance:       17
+javac.debug:            on
+
 #Configure Repositories
 -plugin.1.Local: \
     aQute.bnd.deployer.repository.LocalIndexedRepo; \
         name = Local; \
         pretty = true; \
         local = ${build}/local
-
--plugin.2.Eclipse: \
-    aQute.bnd.deployer.repository.LocalIndexedRepo; \
-        name = Templates; \
-        pretty = true; \
-        local = ${build}/templates
 
 -plugin.3.Release: \
     aQute.bnd.deployer.repository.LocalIndexedRepo; \
@@ -21,10 +23,10 @@
 -baselinerepo: Release
 
 # Eclipse Release repositories 
-eclipse.version          = 4.18
-eclipse.name             = 2020-12
-eclipse.platform.version = R-4.18-202012021800
-eclipse.simu.version     = 202012161000
+eclipse.version          = 4.26
+eclipse.name             = 2022-12
+eclipse.platform.version = R-4.26-202211231800
+eclipse.simu.version     = 202212071000
 
 eclipse.platform.baseurl = http://download.eclipse.org/eclipse/updates
 #eclipse.platform.baseurl = "${fileuri;${user.home}}www/download.eclipse.org/eclipse/updates"
@@ -38,7 +40,7 @@ eclipse.simu.url     = "${eclipse.simu.baseurl}/${eclipse.name}/${eclipse.simu.v
 
 # Remote Eclipse repositories
 
-# 1. creation of the indices via this configurations and store inside cnf/fixedIndices
+#1. creation of the indices via this configurations and store inside cnf/fixedIndices
 #-plugin.10.eclipse.platform: \
 #    aQute.bnd.repository.p2.provider.P2Repository; \
 #        name  = ${eclipse.platform.name}; \
@@ -54,7 +56,7 @@ eclipse.simu.url     = "${eclipse.simu.baseurl}/${eclipse.name}/${eclipse.simu.v
 # 2. use the fixed indices saves the load time on new workspaces - https://bndtools.org/repositories.html
 -plugin.20.eclipse.platform: \
     aQute.bnd.repository.osgi.OSGiRepository;\
-        locations=$[fileuri;${.}]/fixedIndices/p2-Platform_R-4.18-202012021800_index.xml.gz;\
+        locations=$[fileuri;${.}]/fixedIndices/p2-Platform_R-4.26-202211231800_index.xml.gz;\
         name=${eclipse.platform.name};\
         max.stale=-1
 
@@ -67,5 +69,5 @@ Bundle-Version:             1.0.0.${tstamp}
 
 -remoteworkspace        true
 -runfw:                 org.apache.felix.framework
--runee:                 JavaSE-1.8
+-runee:                 JavaSE-17
 
