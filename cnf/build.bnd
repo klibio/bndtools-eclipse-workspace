@@ -22,52 +22,39 @@ javac.debug:            on
 -releaserepo: Release
 -baselinerepo: Release
 
-# Eclipse Release repositories 
-eclipse.version          = 4.26
-eclipse.name             = 2022-12
-eclipse.platform.version = R-4.26-202211231800
-eclipse.simu.version     = 202212071000
+cache=${.}/cache
 
-eclipse.platform.baseurl = http://download.eclipse.org/eclipse/updates
-#eclipse.platform.baseurl = "${fileuri;${user.home}}www/download.eclipse.org/eclipse/updates"
+# eclipse release details
+eclipse.version          = 4.27
+eclipse.name             = 2023-03
+eclipse.platform.version = R-4.27-202303020300
+eclipse.url              = https://download.eclipse.org
+eclipse.simu.version     = 202303151000
+
+# Eclipse Platform release 
+eclipse.platform.baseurl = ${eclipse.url}/eclipse/updates
 eclipse.platform.name    = Platform_${eclipse.platform.version}
 eclipse.platform.url     = "${eclipse.platform.baseurl}/${eclipse.version}/${eclipse.platform.version}"
 
-eclipse.simu.baseurl = http://download.eclipse.org/releases
-#eclipse.simu.baseurl = "${fileuri;${user.home}}www/download.eclipse.org/releases"
-eclipse.simu.name    = "SimuRel_${eclipse.name}_${eclipse.simu.version}"
-eclipse.simu.url     = "${eclipse.simu.baseurl}/${eclipse.name}/${eclipse.simu.version}"
+-plugin.10.eclipse.platform: \
+    aQute.bnd.repository.p2.provider.P2Repository; \
+        name  = ${eclipse.platform.name}; \
+        url   = ${eclipse.platform.url}; \
+        cache = ${cache}
 
-# Remote Eclipse repositories
+# Eclipse Simultaneous release 
+eclipse.simu.baseurl     = ${eclipse.url}/releases
+eclipse.simu.name        = "SimuRel_${eclipse.name}_${eclipse.simu.version}"
+eclipse.simu.url         = "${eclipse.simu.baseurl}/${eclipse.name}/${eclipse.simu.version}"
 
-#1. creation of the indices via this configurations and store inside cnf/fixedIndices
-#-plugin.10.eclipse.platform: \
-#    aQute.bnd.repository.p2.provider.P2Repository; \
-#        name  = ${eclipse.platform.name}; \
-#        url   = ${eclipse.platform.url}
-
+# uncomment the following line to include the simultaneous release
 #-plugin.11.eclipse.simu: \
 #    aQute.bnd.repository.p2.provider.P2Repository; \
 #        name  = ${eclipse.simu.name}; \
 #        url   = ${eclipse.simu.url}
 
-# Reference the locally indexed eclipse repositories
-
-# 2. use the fixed indices saves the load time on new workspaces - https://bndtools.org/repositories.html
--plugin.20.eclipse.platform: \
-    aQute.bnd.repository.osgi.OSGiRepository;\
-        locations=$[fileuri;${.}]/fixedIndices/p2-Platform_R-4.26-202211231800_index.xml.gz;\
-        name=${eclipse.platform.name};\
-        max.stale=-1
-
-#-plugin.21.eclipse.simu: \
-#   aQute.bnd.repository.osgi.OSGiRepository;\
-#        locations = ${fileuri;${.}}/fixedIndices/p2-SimuRel_2020-12_202012161000_index.xml.gz;\
-#        name      = ${eclipse.simu.name}; \
-#       max.stale=-1
-Bundle-Version:             1.0.0.${tstamp}
+Bundle-Version:             0.1.0.${tstamp}
 
 -remoteworkspace        true
--runfw:                 org.apache.felix.framework
+-runfw:                 org.eclipse.osgi
 -runee:                 JavaSE-17
-
